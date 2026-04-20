@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal de Rastreio Quadra</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="hero card">
+        <div class="hero-brand">
+          <img src="assets/logo-eotvos.png.png" alt="Eötvös Transportadora" class="hero-logo" />
+          <div class="hero-text">
+            <span class="eyebrow">Operado por Eötvös Transportadora</span>
+            <h1>Portal de Rastreio Quadra</h1>
+            <p>Acompanhe emissão, coleta, trânsito e entrega da sua nota.</p>
+          </div>
+        </div>
+
+        <form id="searchForm" class="search-panel">
+          <label for="queryInput" class="search-label">Consultar NF, chave ou romaneio</label>
+          <div class="search-row">
+            <input id="queryInput" type="text" placeholder="Digite a NF, chave de acesso ou romaneio" required />
+            <button type="submit">Rastrear</button>
+          </div>
+        </form>
+      </header>
+
+      <section id="feedback" class="feedback" aria-live="polite"></section>
+
+      <section id="multipleSection" class="hidden card">
+        <div class="section-head">
+          <h2>Resultados encontrados</h2>
+          <p>Selecione uma nota para visualizar os detalhes do rastreio.</p>
+        </div>
+        <div id="multipleList" class="result-list"></div>
+      </section>
+
+      <section id="detailSection" class="hidden card">
+        <div class="detail-header">
+          <div>
+            <span class="label-top">NF</span>
+            <h2 id="dNF">—</h2>
+          </div>
+
+          <div>
+            <span class="label-top">Status</span>
+            <p id="dStatus" class="pill">—</p>
+          </div>
+
+          <div>
+            <span class="label-top">Onde está</span>
+            <p id="dWhere" class="where-now">—</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <section class="block">
+          <h3>Linha do tempo</h3>
+          <div id="timeline" class="timeline"></div>
+        </section>
+
+        <section class="block summary-grid">
+          <div class="mini-card">
+            <span class="mini-label">Previsão</span>
+            <strong id="dPrev">—</strong>
+          </div>
+          <div class="mini-card">
+            <span class="mini-label">Entrega</span>
+            <strong id="dEntrega">—</strong>
+          </div>
+          <div class="mini-card">
+            <span class="mini-label">Romaneio</span>
+            <strong id="dRomaneio">—</strong>
+          </div>
+          <div class="mini-card">
+            <span class="mini-label">Volumes</span>
+            <strong id="dVolumes">—</strong>
+          </div>
+        </section>
+
+        <section class="block info-grid">
+          <div class="info-card">
+            <h3>Dados da nota</h3>
+            <div><strong>Remetente:</strong> <span id="dRemetente">—</span></div>
+            <div><strong>Cidade/UF remetente:</strong> <span id="dCidadeRem">—</span></div>
+            <div><strong>Destinatário:</strong> <span id="dDest">—</span></div>
+            <div><strong>Cidade/UF destinatário:</strong> <span id="dCidadeDest">—</span></div>
+          </div>
+
+          <div class="info-card">
+            <h3>Dados logísticos</h3>
+            <div><strong>Chave:</strong> <span id="dChave">—</span></div>
+            <div><strong>Observações:</strong> <span id="dObs">—</span></div>
+          </div>
+        </section>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-line"></div>
+        <p>Eötvös Transportadora • Rastreio de entregas Quadra</p>
+      </footer>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
