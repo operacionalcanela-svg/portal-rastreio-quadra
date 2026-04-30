@@ -1,5 +1,30 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbw19nBjnqtdmuaRPCkdZTBRQ4ItCxnfXQ-fRvS1V9JdCQWsf8JkQ_s2H-yy9XA2Kg753w/exec';
 
+const CLIENTES_VALIDOS = ['QUADRA', 'ITAPOAN'];
+function obterClientePortal() {
+  let cliente = localStorage.getItem('clientePortal');
+
+  if (cliente && CLIENTES_VALIDOS.includes(cliente)) {
+    return cliente;
+  }
+
+  cliente = prompt('Informe o código de acesso do cliente: QUADRA ou ITAPOAN');
+
+  cliente = String(cliente || '').trim().toUpperCase();
+
+  if (!CLIENTES_VALIDOS.includes(cliente)) {
+    alert('Código de cliente inválido.');
+    localStorage.removeItem('clientePortal');
+    return '';
+  }
+
+  localStorage.setItem('clientePortal', cliente);
+  return cliente;
+}
+function trocarCliente() {
+  localStorage.removeItem('clientePortal');
+  obterClientePortal();
+}
 const searchForm = document.getElementById('searchForm');
 const queryInput = document.getElementById('queryInput');
 const feedback = document.getElementById('feedback');
@@ -24,7 +49,13 @@ searchForm.addEventListener('submit', async (e) => {
 });
 
 async function requestSearch(query) {
-  const url = `${API_URL}?query=${encodeURIComponent(query)}`;
+  const clientePortal = obterClientePortal();
+
+  if (!clientePortal) {
+    throw new Error('Cliente não informado.');
+  }
+
+  const url = `${API_URL}?cliente=${encodeURIComponent(clientePortal)}&query=${encodeURIComponent(query)}`;
   const res = await fetch(url, {
     method: 'GET'
   });
@@ -200,3 +231,4 @@ function fmt(v) {
 function setFeedback(msg) {
   feedback.textContent = msg;
 }
+

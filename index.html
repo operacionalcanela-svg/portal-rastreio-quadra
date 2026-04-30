@@ -18,14 +18,18 @@
           </div>
         </div>
 
-        <form id="searchForm" class="search-panel">
-          <label for="queryInput" class="search-label">Consultar NF, chave ou romaneio</label>
-          <div class="search-row">
-            <input id="queryInput" type="text" placeholder="Digite a NF, chave de acesso ou romaneio" required />
-            <button type="submit">Rastrear</button>
-          </div>
-        </form>
-      </header>
+       <form id="searchForm" class="search-panel">
+         <label for="queryInput" class="search-label">Consultar NF, chave ou romaneio</label>
+         <div class="search-row">
+           <input id="queryInput" type="text" placeholder="Digite a NF, chave de acesso ou romaneio" required />
+           <button type="submit">Rastrear</button>
+         </div>
+
+         <button type="button" onclick="trocarCliente()" style="margin-top: 10px;">
+          Trocar cliente
+         </button>
+       </form>
+       </header>
 
       <section id="feedback" class="feedback" aria-live="polite"></section>
 
