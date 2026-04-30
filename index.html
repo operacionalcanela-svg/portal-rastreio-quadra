@@ -6,11 +6,29 @@
     <title>Portal de Rastreio Eötvös</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
+    <div id="loginScreen" class="login-screen">
+      <div class="login-card">
+        <img src="assets/logo-eotvos.png.png" alt="Eötvös Transportadora" class="login-logo" />
+
+        <h2>Portal de Rastreio</h2>
+        <p>Acesse com seu usuário e senha.</p>
+
+        <input id="loginUsuario" type="text" placeholder="Usuário" autocomplete="username" />
+        <input id="loginSenha" type="password" placeholder="Senha" autocomplete="current-password" />
+
+        <button type="button" onclick="entrarPortal()">Entrar</button>
+
+        <div id="loginMsg" class="login-msg"></div>
+      </div>
+    </div>
+
     <main class="container">
       <header class="hero card">
         <div class="hero-brand">
           <img src="assets/logo-eotvos.png.png" alt="Eötvös Transportadora" class="hero-logo" />
+
           <div class="hero-text">
             <span class="eyebrow">Operado por Eötvös Transportadora</span>
             <h1>Portal de Rastreio Eötvös</h1>
@@ -18,18 +36,24 @@
           </div>
         </div>
 
-       <form id="searchForm" class="search-panel">
-         <label for="queryInput" class="search-label">Consultar NF, chave ou romaneio</label>
-         <div class="search-row">
-           <input id="queryInput" type="text" placeholder="Digite a NF, chave de acesso ou romaneio" required />
-           <button type="submit">Rastrear</button>
-         </div>
+        <form id="searchForm" class="search-panel">
+          <label for="queryInput" class="search-label">Consultar NF, chave ou romaneio</label>
 
-         <button type="button" onclick="trocarCliente()" style="margin-top: 10px;">
-          Trocar cliente
-         </button>
-       </form>
-       </header>
+          <div class="search-row">
+            <input
+              id="queryInput"
+              type="text"
+              placeholder="Digite a NF, chave de acesso ou romaneio"
+              required
+            />
+            <button type="submit">Rastrear</button>
+          </div>
+
+          <button type="button" onclick="trocarCliente()" style="margin-top: 10px;">
+            Trocar cliente
+          </button>
+        </form>
+      </header>
 
       <section id="feedback" class="feedback" aria-live="polite"></section>
 

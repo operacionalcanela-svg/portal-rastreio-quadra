@@ -440,3 +440,59 @@ button:hover {
     margin: 1rem auto;
   }
 }
+
+.login-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, #eef2f8 0%, #f7f8fb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 390px;
+  background: #fff;
+  border-radius: 22px;
+  padding: 2rem;
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.12);
+  text-align: center;
+  border: 1px solid #e5e7eb;
+}
+
+.login-logo {
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  border-radius: 18px;
+  background: #0f172a;
+  padding: 10px;
+  margin-bottom: 1rem;
+}
+
+.login-card h2 {
+  margin: 0 0 0.4rem;
+  color: #102a4c;
+}
+
+.login-card p {
+  margin: 0 0 1.2rem;
+  color: #6b7280;
+}
+
+.login-card input {
+  width: 100%;
+  margin-bottom: 0.8rem;
+}
+
+.login-card button {
+  width: 100%;
+}
+
+.login-msg {
+  margin-top: 0.8rem;
+  color: #b42318;
+  font-size: 0.9rem;
+}
