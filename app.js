@@ -2,28 +2,8 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbw19nBjnqtdmuaRPCkdZTBR
 
 let AUTH = {
   usuario: '',
-  senha: '',
-  cliente: ''
+  senha: ''
 };
-const CLIENTES_VALIDOS = ['QUADRA', 'ITAPOAN'];
-function fazerLogin() {
-  const usuario = prompt('Usuário (ex: QUADRA ou ITAPOAN)');
-  const senha = prompt('Senha de acesso');
-
-  if (!usuario || !senha) {
-    alert('Login inválido');
-    return false;
-  }
-
-  AUTH.usuario = usuario.trim().toUpperCase();
-  AUTH.senha = senha.trim();
-
-  return true;
-}
-function trocarCliente() {
-  AUTH = { usuario: '', senha: '', cliente: '' };
-  alert('Faça login novamente.');
-}
 
 const searchForm = document.getElementById('searchForm');
 const queryInput = document.getElementById('queryInput');
@@ -32,8 +12,38 @@ const multipleSection = document.getElementById('multipleSection');
 const multipleList = document.getElementById('multipleList');
 const detailSection = document.getElementById('detailSection');
 
+function entrarPortal() {
+  const usuario = document.getElementById('loginUsuario').value.trim().toUpperCase();
+  const senha = document.getElementById('loginSenha').value.trim();
+  const msg = document.getElementById('loginMsg');
+
+  if (!usuario || !senha) {
+    msg.innerText = 'Informe usuário e senha.';
+    return;
+  }
+
+  AUTH.usuario = usuario;
+  AUTH.senha = senha;
+
+  document.getElementById('loginScreen').style.display = 'none';
+  msg.innerText = '';
+}
+
+function trocarCliente() {
+  AUTH = { usuario: '', senha: '' };
+
+  document.getElementById('loginUsuario').value = '';
+  document.getElementById('loginSenha').value = '';
+  document.getElementById('loginMsg').innerText = '';
+  document.getElementById('loginScreen').style.display = 'flex';
+
+  hideResults();
+  setFeedback('');
+}
+
 searchForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+
   const query = queryInput.value.trim();
   if (!query) return;
 
@@ -44,30 +54,33 @@ searchForm.addEventListener('submit', async (e) => {
     const payload = await requestSearch(query);
     renderPayload(payload, query);
   } catch (err) {
-    setFeedback('Erro ao consultar rastreio. Tente novamente em instantes.');
+    setFeedback('Erro ao consultar rastreio. Verifique o login e tente novamente.');
   }
 });
 
 async function requestSearch(query) {
-  if (!AUTH.usuario) {
-    const ok = fazerLogin();
-    if (!ok) throw new Error('Login necessário');
+  if (!AUTH.usuario || !AUTH.senha) {
+    document.getElementById('loginScreen').style.display = 'flex';
+    throw new Error('Login necessário.');
   }
 
   const url = `${API_URL}?usuario=${encodeURIComponent(AUTH.usuario)}&senha=${encodeURIComponent(AUTH.senha)}&query=${encodeURIComponent(query)}`;
-  const clientePortal = obterClientePortal();
 
-  if (!clientePortal) {
-    throw new Error('Cliente não informado.');
-  }
-
-  const url = `${API_URL}?cliente=${encodeURIComponent(clientePortal)}&query=${encodeURIComponent(query)}`;
   const res = await fetch(url, {
     method: 'GET'
   });
 
   if (!res.ok) throw new Error('Falha na API');
-  return await res.json();
+
+  const payload = await res.json();
+
+  if (payload && payload.type === 'error') {
+    trocarCliente();
+    document.getElementById('loginMsg').innerText = payload.message || 'Acesso não autorizado.';
+    throw new Error(payload.message || 'Acesso não autorizado.');
+  }
+
+  return payload;
 }
 
 function renderPayload(payload, query) {
@@ -118,14 +131,18 @@ function renderMultiple(results) {
 
     card.querySelector('button').addEventListener('click', async () => {
       setFeedback('Carregando detalhes...');
-      const payload = await requestSearch(item.NF || item.id);
 
-      const tipo = payload.type || payload.tipo || '';
-      const resultadoUnico = payload.result || payload.resultado || null;
+      try {
+        const payload = await requestSearch(item.NF || item.id);
+        const tipo = payload.type || payload.tipo || '';
+        const resultadoUnico = payload.result || payload.resultado || null;
 
-      if (tipo === 'single' || tipo === 'único' || tipo === 'unico') {
-        renderDetail(resultadoUnico);
-        detailSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (tipo === 'single' || tipo === 'único' || tipo === 'unico') {
+          renderDetail(resultadoUnico);
+          detailSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } catch (err) {
+        setFeedback('Erro ao carregar detalhes.');
       }
     });
 
@@ -134,6 +151,11 @@ function renderMultiple(results) {
 }
 
 function renderDetail(result) {
+  if (!result) {
+    setFeedback('Resultado inválido.');
+    return;
+  }
+
   detailSection.classList.remove('hidden');
 
   setText('dNF', result.NF);
@@ -198,6 +220,7 @@ function renderTimeline(steps) {
 
     if (step) {
       textoData = fmt(step.date);
+
       if (step.isCurrent) {
         classe = 'timeline-item current';
       } else if (step.done) {
@@ -237,4 +260,3 @@ function fmt(v) {
 function setFeedback(msg) {
   feedback.textContent = msg;
 }
-
